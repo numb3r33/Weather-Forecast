@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- This is an angularjs app which gives 14 day weather forecast for multiple cities -->
+<html ng-app="forecast">
+<head>
+	<title>
+		Web Forecast
+	</title>
+	<link rel = "stylesheet" type="text/css" href="css/main.css">
+
+</head>
+	<!-- This is the general Forecast Controller for displaying the data obtained from OpenWeatherMaps API -->
+	<body ng-controller="ForecastController as forecast">
+		<h2>Weather Forecast</h2>
+		<form id="mainForm" method="get" ng-submit="submit()">
+				<label>City Name(s) or Id: </label><span class="note">(use ',' for multiple cities)</span><input type="text"  ng-model="myPred.text1" id="textBox1"><br />
+				<input type="submit" name="Submit" value="Search">		
+		</form>
+		
+		<!-- This is the Geonavigation controller that calculates the latitude and longitude of the coordinates and displays forecast accordingly -->
+		<div ng-controller="GeoController as geoCtrl">
+			<button class = "geoButton" ng-click="getLocation()">My Location</button>
+				<h1> {{geoCtrl.predictions.city.name}} </h1>
+				<div id="predGeoBlock">
+					<div ng-repeat="pred in geoCtrl.predictions.list" class="pred">
+						<h3> Weather on {{pred.dt | dateConverter}}</h3>
+						<ul>
+						<li> <em>Maximum Temp</em> : {{pred.temp.max}} </li><br/>
+						<li> <em>Minimum Temp</em> : {{pred.temp.min}} </li><br />
+						<li> <em>Humidity</em> : {{pred.humidity}} </li><br />
+						<div ng-repeat="weather in pred.weather">
+							<li> <em>General</em> : {{weather.main}} </li><br />
+							<li> <em>Detailed</em> : {{weather.description}} </li>
+						</div>
+						<ul>
+						<br />
+					</div>
+				</div>
+				
+
+		</div>
+		<hr>
+		<!-- This is the general controller used for displaying forecast of multiple cities -->
+		<div ng-repeat="prediction in forecast.predictions">
+			<h1> {{prediction.city.name}}   </h1>
+			<div id="predBlock">
+				<div ng-repeat="pred in prediction.list" class="pred">
+					<h3> Weather on ({{pred.dt | dateConverter}})</h3>
+					<li> <em>Maximum Temp</em> : {{pred.temp.max}} </li><br/>
+					<li> <em>Minimum Temp</em> : {{pred.temp.min}} </li><br />
+					<li> <em>Humidity</em> : {{pred.humidity}} </li><br />
+					<div ng-repeat="weather in pred.weather">
+						<li> <em>General</em> : {{weather.main}} </li><br />
+						<li> <em>Detailed</em> : {{weather.description}} </li>
+					</div>
+					<br />
+				</div>
+			</div>
+			<hr>
+		</div>
+		
+		<!-- These are all the dependent files needed to run this application -->
+		<script type="text/javascript" src="js/angular.min.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+	</body>
+</html>
